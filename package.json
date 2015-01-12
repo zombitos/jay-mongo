@@ -1,0 +1,29 @@
+{
+  "name": "ia-mongo",
+  "version": "0.0.1",
+  "description": "Mongo DB Operations Framework to be used with ia-schema",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/interactioncr/iamongo.git"
+  },
+  "keywords": [
+    "schema"
+  ],
+  "author": "Jay <jprodma@gmail.com> (http://www.interaction.cr/)",
+  "license": "MIT",
+  "dependencies": {
+    "when": "3.5.*",
+    "underscore": "1.7.*",
+    "mongodb": "~2.*"
+  },
+  "devDependencies": {
+    "mocha": "2.0.1",
+    "chai": "1.9.2",
+    "chai-as-promised": "4.1.1",
+    "jay-schema": "0.0.2"
+  }
+}
