@@ -24,6 +24,9 @@
     "mocha": "2.0.1",
     "chai": "1.9.2",
     "chai-as-promised": "4.1.1",
-    "jay-schema": "0.0.2"
+    "ia-schema": "0.0.1"
+  },
+  "directories": {
+    "test": "test"
   }
 }

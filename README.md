@@ -9,14 +9,14 @@ Mongo DB Operations Framework to be used with ia-schema
 
 ## Usage
 
-  # Vars
+  ### Vars
   ```javascript
   var IASchema = require('ia-schema');
   var IAMongo = require('ia-mongo');
   var connUrl = 'mongodb://localhost/iamongo';
   ```
 
-  # Connect to Database
+  ### Connect to Database
   ```javascript
   IAMongo
     .pConnect(connUrl)
@@ -28,7 +28,7 @@ Mongo DB Operations Framework to be used with ia-schema
     });
   ```
 
-  # Create a Schema with ia-schema
+  ### Create a Schema with ia-schema
   ```javascript
   var JaySchema = new IASchema({
     name: {
@@ -80,16 +80,16 @@ Mongo DB Operations Framework to be used with ia-schema
     }
   }, schemaOptions);
   ```
-  # Register the model to IAMongo
+  ### Register the model to IAMongo
   ```javascript
   IAMongo.register('Jay', JaySchema);
   ```
 
-  # Get the registered Model
+  ### Get the registered Model
   ```javascript
   var Jay = IAMongo.model('Jay');
   ```
-  # Create a Struct
+  ### Create a Struct
   ```javascript
   var struct = {};
   Jay.pMakeStruct({
@@ -104,7 +104,7 @@ Mongo DB Operations Framework to be used with ia-schema
         console.log('struct', struct);
       });
   ```
-  # Make a insertion to DB
+  ### Make a insertion to DB
   ```javascript
   Jay.pCreate(struct)
     .then(function(result) {
@@ -112,34 +112,34 @@ Mongo DB Operations Framework to be used with ia-schema
       });
   ```
 ## Posible Operations To DB (Doc in progress)
-  # Check <a href=''>IA-Schema</a> documentation for Schema Details
+  ### Check <a href='https://github.com/interactioncr/iaschema'>IA-Schema</a> documentation for Schema Details
   ```javascript
   Jay.pMakeStruct(data,extention,options)
   ```
   
-  # Find and Modify
+  ### Find and Modify
   ```javascript
   Jay.pFindAndModify(query, update, options)
   ```
 
-  # Update
+  ### Update
   ```javascript
   Jay.pUpdate(query, update, options)
   ```
 
-  # Create
+  ### Create
   ```javascript
   Jay.pCreate(struct, options)
   ```
-  # Find One
+  ### Find One
   ```javascript
   Jay.pFindOne(query, options)
   ```
-  # Find Many
+  ### Find Many
   ```javascript
   Jay.pFindMany(query, options)
   ```
-  # Count
+  ### Count
   ```javascript
   Jay.pCount(query)
   ```

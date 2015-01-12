@@ -9,7 +9,7 @@
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 var expect = chai.expect;
-var JSchema = require('jay-schema');
+var JSchema = require('ia-schema');
 var schemaOptions = {
   requiredErrorFormatter: function(key) {
     return key + ' is required';
