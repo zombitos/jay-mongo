@@ -1,6 +1,6 @@
 {
   "name": "ia-mongo",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Mongo DB Operations Framework to be used with ia-schema",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "mocha": "2.0.1",
     "chai": "1.9.2",
     "chai-as-promised": "4.1.1",
-    "ia-schema": "0.0.1"
+    "ia-schema": "0.0.5"
   },
   "directories": {
     "test": "test"
