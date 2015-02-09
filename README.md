@@ -7,7 +7,7 @@ Mongo DB Operations Framework to be used with ia-schema
 
   npm install ia-mongo
 
-## Usage
+## Basic Usage
 
   ### Vars
   ```javascript
@@ -37,10 +37,6 @@ Mongo DB Operations Framework to be used with ia-schema
     lastname: {
       required: true
     },
-    phone: {
-      type: Number,
-      required: false
-    },
     email: {
       type: String,
       required: true,
@@ -56,20 +52,10 @@ Mongo DB Operations Framework to be used with ia-schema
         return val;
       }
     },
-    gender: {
-      type: Boolean
-    },
-    id: {
-      type: String,
-      index: true
-    },
     createdAt: {
       type: Date,
       required: true,
       index: 1,
-      indexOptions: {
-        unique: true
-      },
       default: function() {
         return new Date();
       }
@@ -89,55 +75,148 @@ Mongo DB Operations Framework to be used with ia-schema
   ```javascript
   var Jay = IAMongo.model('Jay');
   ```
-  ### Create a Struct
+  ### Create an Struct Manually
   ```javascript
-  var struct = {};
   Jay.pMakeStruct({
-    name: 'Jose',
-        lastname: 'Rodriguez',
-        phone: '555',
-        gender: 'false',
-        email: 'j@interaction.cr',
-        id: 111111111
+      name: 'Jose',
+      lastname: 'Rodriguez',
+      email: 'j@interaction.cr'
     }).then(function(result) {
-        struct = result;
-        console.log('struct', struct);
+        console.log('struct', result);
       });
   ```
-  ### Make a insertion to DB
+  ### Make an insertion to DB
   ```javascript
-  Jay.pCreate(struct)
+  Jay.pCreate({
+      name: 'Jose',
+      lastname: 'Rodriguez',
+      email: 'j@interaction.cr'
+    })
     .then(function(result) {
         console.log('new Jay', result[0]);
       });
   ```
 ## Posible Operations To DB (Doc in progress)
+
+  ### All operations will return a promise
+
   ### Check <a href='https://github.com/interactioncr/iaschema'>IA-Schema</a> documentation for Schema Details
   ```javascript
-  Jay.pMakeStruct(data,extention,options)
+  Jay.pMakeStruct(data,options,extention)
   ```
   
   ### Find and Modify
   ```javascript
-  Jay.pFindAndModify(query, update, options)
+  Jay.pFindAndModify(query, operator, data, options)
   ```
+  Query: the search criteria the document needs to meet to be updated
+
+  Operator: needs to be a string and a valid mongodb update operator
+  such as set, push, inc, check mongodb documentation for operators
+  **Note: when passing operator do not add the $ sign
+
+  Data: Object with properties and their new values
+
+  Options: Options available to mongodb for findAndModify, such as {new:true}. Search mongoDB documentation for available options
+  **Note: results sorting needs to be defined withing options paramenter
+  ```javascript
+  {
+    sort:{createdAt:1}
+  }
+  ```
+
+  pFindAndModify will run ia-schema pMakeStruct operation with option 
+  omitUndefined set to true to validate the data parameter.
+  Check <a href='https://github.com/interactioncr/iaschema'>IA-Schema</a> documentation for Schema Details
 
   ### Update
   ```javascript
-  Jay.pUpdate(query, update, options)
+  Jay.pUpdate(query, operator, data, options)
   ```
+  Query: the search criteria the document needs to meet to be updated
+
+  Operator: needs to be a string and a valid mongodb update operator
+  such as set, push, inc, check mongodb documentation for operators
+  **Note: when passing operator do not add the $ sign
+
+  Data: Object with properties and their new values
+
+  Options: Options available to mongodb for update, such as {upsert:true}. Search mongoDB documentation for available options
+
+  pUpdate will run ia-schema pMakeStruct operation with option 
+  omitUndefined set to true to validate the data parameter.
+  Check <a href='https://github.com/interactioncr/iaschema'>IA-Schema</a> documentation for Schema Details
+
 
   ### Create
   ```javascript
-  Jay.pCreate(struct, options)
+  Jay.pCreate(data, options)
   ```
+  Data parameter can be an object or an array of objects.
+  Either way the result will be an array of objects with the new
+  documents.
+
+  Options object, check mongodb documentation for inserting options.
+
+  pCreate will run ia-schema pMakeStruct operation to validate the data parameter.
+  Check <a href='https://github.com/interactioncr/iaschema'>IA-Schema</a> documentation for Schema Details
+
   ### Find One
   ```javascript
   Jay.pFindOne(query, options)
   ```
+  Query: the search criteria the document needs to meet to be found
+
+  Options: fields to be returned or excluded, mongo does not allow
+  excluding and including fields definition.
+  ```javascript
+  //INCLUDING FIELDS
+  {
+    fields:{
+      createdAt:1
+    }
+  }
+  //EXCLUDING FIELDS
+  {
+    fields:{
+      _id:0,
+      email:0
+    }
+  }
+  ```
   ### Find Many
   ```javascript
   Jay.pFindMany(query, options)
+  ```
+  Query: the search criteria the documents need to meet to be found
+
+  Options: fields to be returned or excluded, mongo does not allow
+  excluding and including fields definition.
+  Also other options such as sorting, check mongo documentation
+  for available options.
+  ```javascript
+  //INCLUDING FIELDS
+  {
+    fields:{
+      createdAt:1
+    }
+  }
+  //EXCLUDING FIELDS
+  {
+    fields:{
+      _id:0,
+      email:0
+    }
+  }
+  ```
+  ```javascript
+  //SORTING NEEDS TO BE DONE IN ARRAY NOTATION
+  {
+    fields:{
+      createdAt:1
+    }
+    sort:[['createdAt','desc'],['name','asc']]
+  }
   ```
   ### Count
   ```javascript
@@ -156,3 +235,4 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 
 * 0.0.1 Initial release
 * 0.0.3 Updated ia-schema test version
+* 1.0.0 Integrated ia-schema operations to model

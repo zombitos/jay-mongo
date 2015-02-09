@@ -1,6 +1,6 @@
 {
   "name": "ia-mongo",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "Mongo DB Operations Framework to be used with ia-schema",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,7 @@
     "url": "git+https://github.com/interactioncr/iamongo.git"
   },
   "keywords": [
+    "mongo",
     "schema"
   ],
   "author": "Jay <jprodma@gmail.com> (http://www.interaction.cr/)",
@@ -24,7 +25,7 @@
     "mocha": "2.0.1",
     "chai": "1.9.2",
     "chai-as-promised": "4.1.1",
-    "ia-schema": "0.0.5"
+    "ia-schema": "1.0.3"
   },
   "directories": {
     "test": "test"

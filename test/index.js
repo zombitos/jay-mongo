@@ -25,10 +25,6 @@ var Jay = new JSchema({
   lastname: {
     required: true
   },
-  phone: {
-    type: Number,
-    required: false
-  },
   email: {
     type: String,
     required: true,
@@ -44,20 +40,10 @@ var Jay = new JSchema({
       return val;
     }
   },
-  gender: {
-    type: Boolean
-  },
-  id: {
-    type: String,
-    index: true
-  },
   createdAt: {
     type: Date,
     required: true,
     index: 1,
-    indexOptions: {
-      unique: true
-    },
     default: function() {
       return new Date();
     }
@@ -85,8 +71,13 @@ describe('Succesfull operations', function() {
       .pConnect(connUrl)
       .then(function() {
         console.log('Connected Correctly to DB');
+
         helpers.dropCollections(function(err) {
           if (err) done(err);
+
+          //REGISTER MODEL
+          IAMongo.register('Jay', Jay);
+          Model = IAMongo.model('Jay');
           done();
         });
       }, function(err) {
@@ -94,36 +85,92 @@ describe('Succesfull operations', function() {
       });
   });
 
-  it('registers model and creates struct', function(done) {
-    IAMongo.register('Jay', Jay);
-    Model = IAMongo.model('Jay');
+  it('creates struct', function(done) {
     Model
       .pMakeStruct({
         name: 'Jose',
         lastname: 'Rodriguez',
-        phone: '555',
-        gender: 'false',
-        email: 'j@interaction.cr',
-        id: 111111111
+        email: 'j@interaction.cr'
       })
       .should.eventually.have.property('email')
       .notify(done);
   });
 
-  it('Model makes insertion model to DB', function(done) {
-    Model
-      .pMakeStruct({
+  it('Model makes insertion to DB', function(done) {
+    Model.pCreate({
         name: 'Jose',
         lastname: 'Rodriguez',
-        phone: '555',
-        gender: 'false',
-        email: 'j@interaction.cr',
-        id: 111111111
-      }).then(function(struct) {
-        console.log('struct', struct);
-        Model.pCreate(struct)
-          .should.eventually.be.a('array')
-          .notify(done);
-      });
+        email: 'j@interaction.cr'
+      })
+      .should.eventually.be.a('array')
+      .notify(done);
+  });
+
+  it('Model makes multiple insertions to DB', function(done) {
+    Model.pCreate([{
+        name: 'Nestor',
+        lastname: 'Villalobos',
+        email: 'nestor@interaction.cr'
+      },{name:'Martin',
+      lastname:'Shaer',
+      email:'martin@interacion.cr'}])
+      .should.eventually.be.a('array')
+      .notify(done);
+  });
+
+  it('Model updates existing document', function(done) {
+    Model.pUpdate({
+        email: 'j@interaction.cr'
+      },'set',{
+        email: 'jprodma@gmail.com'
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .notify(done);
+  });
+
+  it('Model finds and modifies existing document', function(done) {
+    Model.pFindAndModify({
+        email: 'jprodma@gmail.com'
+      },'set',{
+        email: 'j@interaction.cr'
+      },{
+        new: true
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('email','j@interaction.cr')
+      .notify(done);
+  });
+
+  it('Model finds one existing document', function(done) {
+    Model.pFindOne({
+        email: 'j@interaction.cr'
+      },{
+        fields:{
+          email:0
+        }
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('name','Jose')
+      .notify(done);
+  });
+
+  it('Model finds many existing documents', function(done) {
+    Model.pFindMany({
+        email: 'j@interaction.cr'
+      },{
+        fields:{
+          email:1
+        },
+        sort:[['createdAt','desc'],['name','desc']]
+      })
+      .should.eventually.be.a('array')
+      .notify(done);
+  });
+
+  it('Model counts existing documents', function(done) {
+    Model.pCount({})
+      .should.eventually.equals(3)
+      .notify(done);
   });
 });
