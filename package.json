@@ -1,6 +1,6 @@
 {
   "name": "ia-mongo",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Mongo DB Operations Framework to be used with ia-schema",
   "main": "index.js",
   "scripts": {
@@ -17,15 +17,15 @@
   "author": "Jay <jprodma@gmail.com> (http://www.interaction.cr/)",
   "license": "MIT",
   "dependencies": {
-    "when": "3.5.*",
-    "underscore": "1.7.*",
+    "when": "3.7.*",
+    "underscore": "1.8.*",
     "mongodb": "~2.*"
   },
   "devDependencies": {
     "mocha": "2.0.1",
     "chai": "1.9.2",
     "chai-as-promised": "4.1.1",
-    "ia-schema": "1.0.3"
+    "ia-schema": "1.0.4"
   },
   "directories": {
     "test": "test"

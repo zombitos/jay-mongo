@@ -111,9 +111,11 @@ describe('Succesfull operations', function() {
         name: 'Nestor',
         lastname: 'Villalobos',
         email: 'nestor@interaction.cr'
-      },{name:'Martin',
-      lastname:'Shaer',
-      email:'martin@interacion.cr'}])
+      }, {
+        name: 'Martin',
+        lastname: 'Shaer',
+        email: 'martin@interacion.cr'
+      }])
       .should.eventually.be.a('array')
       .notify(done);
   });
@@ -121,8 +123,29 @@ describe('Succesfull operations', function() {
   it('Model updates existing document', function(done) {
     Model.pUpdate({
         email: 'j@interaction.cr'
-      },'set',{
-        email: 'jprodma@gmail.com'
+      }, {
+        set: {
+          email: 'jprodma@gmail.com'
+        }
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .notify(done);
+  });
+
+  it('Model inserts new document with upsert', function(done) {
+    Model.pUpdate({
+        email: 'jose.rodriguez@interaction.cr'
+      }, {
+        set: {
+          name: 'Pablo',
+          lastname: 'Masís'
+        },
+        $setOnInsert: {
+          createdAt: new Date()
+        }
+      }, {
+        upsert: true
       })
       .should.eventually.be.a('object')
       .and.have.property('n')
@@ -132,37 +155,43 @@ describe('Succesfull operations', function() {
   it('Model finds and modifies existing document', function(done) {
     Model.pFindAndModify({
         email: 'jprodma@gmail.com'
-      },'set',{
-        email: 'j@interaction.cr'
-      },{
+      }, {
+        set: {
+          email: 'j@interaction.cr'
+        }
+      }, {
         new: true
       })
       .should.eventually.be.a('object')
-      .and.have.property('email','j@interaction.cr')
+      .and.have.property('email', 'j@interaction.cr')
       .notify(done);
   });
 
   it('Model finds one existing document', function(done) {
     Model.pFindOne({
-        email: 'j@interaction.cr'
-      },{
-        fields:{
-          email:0
+        email: 'jose.rodriguez@interaction.cr'
+      }, {
+        fields: {
+          email: 0
         }
       })
       .should.eventually.be.a('object')
-      .and.have.property('name','Jose')
+      .and.have.property('createdAt')
+      .and.be.a('date')
       .notify(done);
   });
 
   it('Model finds many existing documents', function(done) {
     Model.pFindMany({
         email: 'j@interaction.cr'
-      },{
-        fields:{
-          email:1
+      }, {
+        fields: {
+          email: 1
         },
-        sort:[['createdAt','desc'],['name','desc']]
+        sort: [
+          ['createdAt', 'desc'],
+          ['name', 'desc']
+        ]
       })
       .should.eventually.be.a('array')
       .notify(done);
@@ -170,7 +199,7 @@ describe('Succesfull operations', function() {
 
   it('Model counts existing documents', function(done) {
     Model.pCount({})
-      .should.eventually.equals(3)
+      .should.eventually.equals(4)
       .notify(done);
   });
 });

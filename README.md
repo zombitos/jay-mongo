@@ -107,15 +107,30 @@ Mongo DB Operations Framework to be used with ia-schema
   
   ### Find and Modify
   ```javascript
-  Jay.pFindAndModify(query, operator, data, options)
+  Jay.pFindAndModify(query, data, options)
   ```
   Query: the search criteria the document needs to meet to be updated
 
-  Operator: needs to be a string and a valid mongodb update operator
-  such as set, push, inc, check mongodb documentation for operators
-  **Note: when passing operator do not add the $ sign
+  Data: Update Object, needs to be 
+  key = Valid Mongodb update operator(Such as set, push, inc. Check mongodb documentation for operators) 
+  value = object with poperties to update
+  **Note: The operators can with or without the '$' sign
 
-  Data: Object with properties and their new values
+  ```javascript
+  //Example
+   Model.pFindAndModify({
+        email: 'test@email.com'
+      }, {
+        set: {
+          email: 'test2@email.cr'
+        },
+        $inc:{
+          timesLogged: 1
+        }
+      }, {
+        new: true
+      })
+  ```
 
   Options: Options available to mongodb for findAndModify, such as {new:true}. Search mongoDB documentation for available options
   **Note: results sorting needs to be defined withing options paramenter
@@ -135,11 +150,27 @@ Mongo DB Operations Framework to be used with ia-schema
   ```
   Query: the search criteria the document needs to meet to be updated
 
-  Operator: needs to be a string and a valid mongodb update operator
-  such as set, push, inc, check mongodb documentation for operators
-  **Note: when passing operator do not add the $ sign
+  Data: Update Object, needs to be 
+  key = Valid Mongodb update operator(Such as set, push, inc. Check mongodb documentation for operators) 
+  value = object with poperties to update
+  **Note: The operators can with or without the '$' sign
 
-  Data: Object with properties and their new values
+  ```javascript
+  //Example
+   Model.pUpdate({
+        email: 'test@test.cr'
+      }, {
+        set: {
+          name: 'Hola',
+          lastname: 'Mundo'
+        },
+        $setOnInsert: {
+          createdAt: new Date()
+        }
+      }, {
+        upsert: true
+      })
+  ```
 
   Options: Options available to mongodb for update, such as {upsert:true}. Search mongoDB documentation for available options
 
@@ -236,3 +267,4 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 * 0.0.1 Initial release
 * 0.0.3 Updated ia-schema test version
 * 1.0.0 Integrated ia-schema operations to model
+* 2.0.0 Change Update Interfaces
