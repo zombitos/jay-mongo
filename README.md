@@ -146,7 +146,7 @@ Mongo DB Operations Framework to be used with ia-schema
 
   ### Update
   ```javascript
-  Jay.pUpdate(query, operator, data, options)
+  Jay.pUpdate(query, data, options)
   ```
   Query: the search criteria the document needs to meet to be updated
 
@@ -249,6 +249,25 @@ Mongo DB Operations Framework to be used with ia-schema
     sort:[['createdAt','desc'],['name','asc']]
   }
   ```
+  ### Destroy
+  ```javascript
+  Jay.pDestroy(query, options)
+  ```
+  Query: the search criteria the documents need to meet to be destroyed
+
+  Options: justOne: Boolean, default true. If true only destroys the first document found, 
+  if false it deletes all documents that meet the criteria
+  ```javascript
+  //DESTROYS FIRST FOUND
+  {
+    justOne: true //default
+  }
+  //DESTROYS ALL THAT MEET CRITERIA
+  {
+    justOne: false
+  }
+  ```
+
   ### Count
   ```javascript
   Jay.pCount(query)
@@ -268,3 +287,4 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 * 0.0.3 Updated ia-schema test version
 * 1.0.0 Integrated ia-schema operations to model
 * 2.0.0 Change Update Interfaces
+* 2.1.0 Added pDestroy function

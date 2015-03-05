@@ -115,6 +115,10 @@ describe('Succesfull operations', function() {
         name: 'Martin',
         lastname: 'Shaer',
         email: 'martin@interacion.cr'
+      }, {
+        name: 'Martin',
+        lastname: 'Corrales',
+        email: 'martin.corrales@interacion.cr'
       }])
       .should.eventually.be.a('array')
       .notify(done);
@@ -197,9 +201,31 @@ describe('Succesfull operations', function() {
       .notify(done);
   });
 
+  it('Destroy document matching query, single document', function(done) {
+    Model.pDestroy({
+        email: 'j@interaction.cr'
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .and.equals(1)
+      .notify(done);
+  });
+
+  it('Destroy document matching query, many documents', function(done) {
+    Model.pDestroy({
+        name: 'Martin'
+      }, {
+        justOne: 'false'
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .and.equals(2)
+      .notify(done);
+  });
+
   it('Model counts existing documents', function(done) {
     Model.pCount({})
-      .should.eventually.equals(4)
+      .should.eventually.equals(2)
       .notify(done);
   });
 });
