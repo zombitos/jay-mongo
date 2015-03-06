@@ -1,6 +1,6 @@
 {
   "name": "ia-mongo",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Mongo DB Operations Framework to be used with ia-schema",
   "main": "index.js",
   "scripts": {
