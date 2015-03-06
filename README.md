@@ -288,3 +288,4 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 * 1.0.0 Integrated ia-schema operations to model
 * 2.0.0 Change Update Interfaces
 * 2.1.0 Added pDestroy function
+* 2.1.1 Fixed nested updates

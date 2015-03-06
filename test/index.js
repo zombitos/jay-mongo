@@ -25,6 +25,10 @@ var Jay = new JSchema({
   lastname: {
     required: true
   },
+  clientNo: {
+    type: Number,
+    default: 0
+  },
   email: {
     type: String,
     required: true,
@@ -38,6 +42,13 @@ var Jay = new JSchema({
         return false;
       }
       return val;
+    }
+  },
+  otherInfo: {
+    type: Object,
+    default: {
+      hair: 'black',
+      eyes: 'brown'
     }
   },
   createdAt: {
@@ -92,7 +103,8 @@ describe('Succesfull operations', function() {
         lastname: 'Rodriguez',
         email: 'j@interaction.cr'
       })
-      .should.eventually.have.property('email')
+      .should.eventually.have.property('otherInfo')
+      .and.have.property('hair')
       .notify(done);
   });
 
@@ -137,6 +149,24 @@ describe('Succesfull operations', function() {
       .notify(done);
   });
 
+  it('Model updates nested property document', function(done) {
+    Model.pUpdate({
+        email: 'jprodma@gmail.com'
+      }, {
+        set: {
+          'otherInfo.hair': 'blue',
+          'name': 'Jose Pablo'
+        },
+        inc: {
+          clientNo: 1
+        }
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .and.equals(1)
+      .notify(done);
+  });
+
   it('Model inserts new document with upsert', function(done) {
     Model.pUpdate({
         email: 'jose.rodriguez@interaction.cr'
@@ -173,15 +203,16 @@ describe('Succesfull operations', function() {
 
   it('Model finds one existing document', function(done) {
     Model.pFindOne({
-        email: 'jose.rodriguez@interaction.cr'
+        email: 'j@interaction.cr'
       }, {
         fields: {
           email: 0
         }
       })
       .should.eventually.be.a('object')
-      .and.have.property('createdAt')
-      .and.be.a('date')
+      .and.have.property('otherInfo')
+      .and.have.property('hair')
+      .and.equals('blue')
       .notify(done);
   });
 
