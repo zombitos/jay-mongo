@@ -29,6 +29,10 @@ var Jay = new JSchema({
     type: Number,
     default: 0
   },
+  counter: {
+    type: Number,
+    default: 2
+  },
   email: {
     type: String,
     required: true,
@@ -51,6 +55,10 @@ var Jay = new JSchema({
       eyes: 'brown'
     }
   },
+  tags: {
+    type: Array,
+    default: []
+  },
   createdAt: {
     type: Date,
     required: true,
@@ -60,6 +68,10 @@ var Jay = new JSchema({
     }
   },
   deletedAt: {
+    type: Date,
+    default: null
+  },
+  updatedAt: {
     type: Date,
     default: null
   }
@@ -135,6 +147,185 @@ describe('Succesfull operations', function() {
       .should.eventually.be.a('array')
       .notify(done);
   });
+
+  it('Updates add $inc', function(done) {
+    Model.pUpdate({
+        email: 'j@interaction.cr'
+      }, {
+        inc: {
+          clientNo: 1
+        }
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .and.equals(1)
+      .notify(done);
+  });
+
+  it('Updates substract $inc', function(done) {
+    Model.pUpdate({
+        email: 'j@interaction.cr'
+      }, {
+        inc: {
+          counter: -2
+        }
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .and.equals(1)
+      .notify(done);
+  });
+
+  // MONGO v 2.6 > needed
+  // it('Updates $mul', function(done) {
+  //   Model.pUpdate({
+  //       email: 'j@interaction.cr'
+  //     }, {
+  //       mul: {
+  //         clientNo: 4
+  //       }
+  //     })
+  //     .should.eventually.be.a('object')
+  //     .and.have.property('n')
+  //     .and.equals(1)
+  //     .notify(done);
+  // });
+
+  it('Updates $push simple', function(done) {
+    Model.pUpdate({
+        email: 'j@interaction.cr'
+      }, {
+        push: {
+          tags: 'charcos'
+        }
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .and.equals(1)
+      .notify(done);
+  });
+
+  it('Updates $push with options', function(done) {
+    Model.pUpdate({
+        email: 'j@interaction.cr'
+      }, {
+        push: {
+          tags: {
+            $each: ['javascript', 'mongo'],
+            $slice: -2
+          }
+        }
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .and.equals(1)
+      .notify(done);
+  });
+
+  it('Updates $addToSet simple', function(done) {
+    Model.pUpdate({
+        email: 'j@interaction.cr'
+      }, {
+        $addToSet: {
+          tags: 'charcos'
+        }
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .and.equals(1)
+      .notify(done);
+  });
+
+  it('Updates $addToSet with options', function(done) {
+    Model.pUpdate({
+        email: 'j@interaction.cr'
+      }, {
+        addToSet: {
+          tags: {
+            $each: ['charcos', 'mongo', 'web']
+          }
+        }
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .and.equals(1)
+      .notify(done);
+  });
+
+  // MONGO 2.6 >
+  // it('Updates $currentDate', function(done) {
+  //   Model.pUpdate({
+  //       email: 'j@interaction.cr'
+  //     }, {
+  //       $currentDate: {
+  //         updatedAt: {
+  //           $type: 'date'
+  //         },
+  //         deletedAt: true
+  //       }
+  //     })
+  //     .should.eventually.be.a('object')
+  //     .and.have.property('n')
+  //     .and.equals(1)
+  //     .notify(done);
+  // });
+
+  it('Updates $pop last', function(done) {
+    Model.pUpdate({
+        email: 'j@interaction.cr'
+      }, {
+        pop: {
+          tags: -1
+        }
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .and.equals(1)
+      .notify(done);
+  });
+
+  it('Updates $pop first', function(done) {
+    Model.pUpdate({
+        email: 'j@interaction.cr'
+      }, {
+        pop: {
+          tags: 1
+        }
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .and.equals(1)
+      .notify(done);
+  });
+
+  it('Updates $unset', function(done) {
+    Model.pUpdate({
+        email: 'j@interaction.cr'
+      }, {
+        $unset: {
+          counter: ''
+        }
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .and.equals(1)
+      .notify(done);
+  });
+
+  it('Updates $rename', function(done) {
+    Model.pUpdate({
+        email: 'j@interaction.cr'
+      }, {
+        rename: {
+          tags: 'etiquetas'
+        }
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .and.equals(1)
+      .notify(done);
+  });
+
 
   it('Model updates existing document', function(done) {
     Model.pUpdate({
@@ -234,7 +425,7 @@ describe('Succesfull operations', function() {
 
   it('Destroy document matching query, single document', function(done) {
     Model.pDestroy({
-        email: 'j@interaction.cr'
+        email: 'jose.rodriguez@interaction.cr'
       })
       .should.eventually.be.a('object')
       .and.have.property('n')

@@ -289,3 +289,4 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 * 2.0.0 Change Update Interfaces
 * 2.1.0 Added pDestroy function
 * 2.1.1 Fixed nested updates
+* 2.1.3 Strong validation form update operators
