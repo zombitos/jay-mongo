@@ -14,6 +14,7 @@ Mongo DB Operations Framework to be used with ia-schema
   var IASchema = require('ia-schema');
   var IAMongo = require('ia-mongo');
   var connUrl = 'mongodb://localhost/iamongo';
+
   ```
 
   ### Connect to Database
@@ -67,8 +68,60 @@ Mongo DB Operations Framework to be used with ia-schema
   }, schemaOptions);
   ```
   ### Register the model to IAMongo
+
+  Basic registration
   ```javascript
   IAMongo.register('Jay', JaySchema);
+  ```
+
+  You can register custom methods to add extra operations, or operation wrappers to the models
+
+  ```javascript
+  var methods = {
+    sayHello: function() {
+      return 'Hello';
+    },
+    pFindByEmail: function(email) {
+      return this.pFindOne({
+        email: email
+      }).then(function(result) {
+        return result;
+      }, function() {
+        return 'ERROR!!!!';
+      })
+    }
+  };
+  IAMongo.register('Jay', JaySchema,methods);
+  ```
+  Methods parameter needs to be an object.
+  Methods properties names need to different form IAMONGO reserved operation names:
+    pMakeStruct
+    pFindAndModify
+    pUpdate
+    pDestroy
+    pCreate
+    pFindOne
+    pFindMany
+    pCount
+
+  ### Load Models
+  You can use loadModels method to require the files of a folder where your models are, that way you can make sure when you call a model it has already been registered
+
+  ```javascript
+  IAMongo.loadModels(__dirname + '/models/');
+  ```
+
+  ###Express app.js example
+  ```javascript
+  IAMongo.pConnect(config.db)
+    .then(function() {
+      IAMongo.loadModels(__dirname + '/_app/models/');
+      var app = express();
+      //EXPRESS CONFIGURATION WOULD BE HERE
+      module.exports = app;
+    }, function(err) {
+      console.error('IAMONGO CONNECTION ERROR:', err);
+    });
   ```
 
   ### Get the registered Model
@@ -85,6 +138,7 @@ Mongo DB Operations Framework to be used with ia-schema
         console.log('struct', result);
       });
   ```
+
   ### Make an insertion to DB
   ```javascript
   Jay.pCreate({
@@ -96,6 +150,13 @@ Mongo DB Operations Framework to be used with ia-schema
         console.log('new Jay', result[0]);
       });
   ```
+  ### Use a custom operation
+  ```javascript
+  Jay.pFindByEmail('j@interaction.cr').then(function(result) {
+    console.log('Found Jay', result);
+  });
+  ```
+
 ## Posible Operations To DB (Doc in progress)
 
   ### All operations will return a promise
@@ -290,3 +351,4 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 * 2.1.0 Added pDestroy function
 * 2.1.1 Fixed nested updates
 * 2.1.3 Strong validation form update operators
+* 2.1.4 Added features methods and loadModels

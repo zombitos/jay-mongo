@@ -9,6 +9,7 @@ var when = require('when');
 var schemas = {};
 var Model = require('./lib/model');
 var connManager = require('./lib/connectionManager');
+var fs = require('fs');
 // -----------------------
 // Class Definition
 // -----------------------
@@ -23,8 +24,8 @@ module.exports = {
   //model
 
   /////
-  register: function register(key, jschema) {
-    schemas[key] = new Model(key, jschema);
+  register: function register(key, jschema, methods) {
+    schemas[key] = new Model(key, jschema, methods);
   },
 
   //////
@@ -39,6 +40,12 @@ module.exports = {
     });
   },
 
+  /////
+  loadModels: function loadModels(modelsPath) {
+    fs.readdirSync(modelsPath).forEach(function(file) {
+      if (~file.indexOf('.js')) require(modelsPath + file);
+    });
+  },
   /////
   model: function model(key) {
     return _.clone(schemas[key]);

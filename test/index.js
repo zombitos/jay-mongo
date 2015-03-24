@@ -9,79 +9,10 @@
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 var expect = chai.expect;
-var JSchema = require('ia-schema');
-var schemaOptions = {
-  requiredErrorFormatter: function(key) {
-    return key + ' is required';
-  },
-  typeErrorFormatter: function(key) {
-    return key + ' is not of correct data type';
-  }
-};
-var Jay = new JSchema({
-  name: {
-    required: true,
-  },
-  lastname: {
-    required: true
-  },
-  clientNo: {
-    type: Number,
-    default: 0
-  },
-  counter: {
-    type: Number,
-    default: 2
-  },
-  email: {
-    type: String,
-    required: true,
-    index: 1,
-    indexOptions: {
-      unique: true
-    },
-    validator: function(val) {
-      var regex = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
-      if (!regex.test(val)) {
-        return false;
-      }
-      return val;
-    }
-  },
-  otherInfo: {
-    type: Object,
-    default: {
-      hair: 'black',
-      eyes: 'brown'
-    }
-  },
-  tags: {
-    type: Array,
-    default: []
-  },
-  createdAt: {
-    type: Date,
-    required: true,
-    index: 1,
-    default: function() {
-      return new Date();
-    }
-  },
-  deletedAt: {
-    type: Date,
-    default: null
-  },
-  updatedAt: {
-    type: Date,
-    default: null
-  }
-}, schemaOptions);
-var struct = {};
 var IAMongo = require('../index');
 var connUrl = 'mongodb://localhost/iamongo';
 var Model = null;
 var helpers = require('./helpers');
-
 
 
 chai.use(chaiAsPromised);
@@ -98,8 +29,9 @@ describe('Succesfull operations', function() {
         helpers.dropCollections(function(err) {
           if (err) done(err);
 
-          //REGISTER MODEL
-          IAMongo.register('Jay', Jay);
+          //REGISTER MODELS
+          IAMongo
+            .loadModels(__dirname + '/models/');
           Model = IAMongo.model('Jay');
           done();
         });
@@ -120,6 +52,7 @@ describe('Succesfull operations', function() {
       .notify(done);
   });
 
+
   it('Model makes insertion to DB', function(done) {
     Model.pCreate({
         name: 'Jose',
@@ -127,6 +60,15 @@ describe('Succesfull operations', function() {
         email: 'j@interaction.cr'
       })
       .should.eventually.be.a('array')
+      .notify(done);
+  });
+
+  it('uses a custom method', function(done) {
+    Model
+      .pFindByEmail('j@interaction.cr')
+      .should.eventually.be.a('object')
+      .and.have.property('name')
+      .and.equals('Jose')
       .notify(done);
   });
 
