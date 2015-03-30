@@ -352,3 +352,4 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 * 2.1.1 Fixed nested updates
 * 2.1.3 Strong validation form update operators
 * 2.1.4 Added features methods and loadModels
+* 2.1.5 Fixed Nested property update bug
