@@ -133,6 +133,8 @@ describe('Succesfull operations', function() {
   //     .notify(done);
   // });
 
+
+
   it('Updates $push simple', function(done) {
     Model.pUpdate({
         email: 'j@interaction.cr'
@@ -282,16 +284,52 @@ describe('Succesfull operations', function() {
       .notify(done);
   });
 
+
   it('Model updates nested property document', function(done) {
     Model.pUpdate({
         email: 'jprodma@gmail.com'
       }, {
         set: {
-          'otherInfo.hair': 'blue',
+          'otherInfo.hair': {
+            color: 'black',
+            type: 'curly'
+          },
           'name': 'Jose Pablo'
         },
         inc: {
           clientNo: 1
+        }
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .and.equals(1)
+      .notify(done);
+  });
+
+  it('Model updates nested property document', function(done) {
+    Model.pUpdate({
+        email: 'jprodma@gmail.com'
+      }, {
+        set: {
+          'otherInfo.hair.color': {
+            r: 0,
+            g: 0,
+            b: 0
+          }
+        }
+      })
+      .should.eventually.be.a('object')
+      .and.have.property('n')
+      .and.equals(1)
+      .notify(done);
+  });
+
+  it('Model updates nested property document with non existing prop', function(done) {
+    Model.pUpdate({
+        email: 'jprodma@gmail.com'
+      }, {
+        set: {
+          'otherInfo.height': 'short'
         }
       })
       .should.eventually.be.a('object')
@@ -345,7 +383,9 @@ describe('Succesfull operations', function() {
       .should.eventually.be.a('object')
       .and.have.property('otherInfo')
       .and.have.property('hair')
-      .and.equals('blue')
+      .and.have.property('color')
+      .and.have.property('r')
+      .and.equals(0)
       .notify(done);
   });
 
