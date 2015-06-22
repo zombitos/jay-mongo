@@ -355,3 +355,4 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 * 2.1.5 Fixed Nested property update bug
 * 2.1.6 Node version fixed
 * 2.1.7 Format
+* 2.1.8 Added comparison operations to id parser
