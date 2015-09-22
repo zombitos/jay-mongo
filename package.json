@@ -1,20 +1,20 @@
 {
-  "name": "ia-mongo",
-  "version": "2.1.8",
-  "description": "Mongo DB Operations Framework to be used with ia-schema",
+  "name": "jay-mongo",
+  "version": "1.0.0",
+  "description": "Mongo DB Operations Framework to be used with jay-schema",
   "main": "index.js",
   "scripts": {
     "test": "make test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/interactioncr/iamongo.git"
+    "url": "git+https://github.com/zombitos/jay-mongo.git"
   },
   "keywords": [
     "mongo",
     "schema"
   ],
-  "author": "Jay <jprodma@gmail.com> (http://www.interaction.cr/)",
+  "author": "Jay <jprodma@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "when": "3.7.*",
@@ -28,7 +28,7 @@
     "mocha": "2.0.1",
     "chai": "1.9.2",
     "chai-as-promised": "4.1.1",
-    "ia-schema": "1.0.5"
+    "jay-schema": "1.0.1"
   },
   "directories": {
     "test": "test"

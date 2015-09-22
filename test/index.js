@@ -10,7 +10,7 @@ var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 var expect = chai.expect;
 var IAMongo = require('../index');
-var connUrl = 'mongodb://localhost/iamongo';
+var connUrl = 'mongodb://localhost/jaymongo';
 var Model = null;
 var helpers = require('./helpers');
 
@@ -58,6 +58,8 @@ describe('Succesfull operations', function() {
         name: 'Jose',
         lastname: 'Rodriguez',
         email: 'j@interaction.cr'
+      }, null, {
+        omitUndefined: true
       })
       .should.eventually.be.a('array')
       .notify(done);
@@ -85,7 +87,9 @@ describe('Succesfull operations', function() {
         name: 'Martin',
         lastname: 'Corrales',
         email: 'martin.corrales@interacion.cr'
-      }])
+      }],null, {
+        omitUndefined: true
+      })
       .should.eventually.be.a('array')
       .notify(done);
   });

@@ -1,7 +1,7 @@
-IAMongo
+Jay-Mongo
 ===============
 
-Mongo DB Operations Framework to be used with ia-schema
+Mongo DB Operations Framework to be used with jay-schema
 
 ## Installation
 
@@ -11,15 +11,15 @@ Mongo DB Operations Framework to be used with ia-schema
 
   ### Vars
   ```javascript
-  var IASchema = require('ia-schema');
-  var IAMongo = require('ia-mongo');
-  var connUrl = 'mongodb://localhost/iamongo';
+  var jay-schema = require('jay-schema');
+  var Jay-Mongo = require('jay-mongo');
+  var connUrl = 'mongodb://localhost/jaymongo';
 
   ```
 
   ### Connect to Database
   ```javascript
-  IAMongo
+  Jay-Mongo
     .pConnect(connUrl)
     .then(function() {
       console.log('Connected Correctly to DB');
@@ -29,9 +29,9 @@ Mongo DB Operations Framework to be used with ia-schema
     });
   ```
 
-  ### Create a Schema with ia-schema
+  ### Create a Schema with jay-schema
   ```javascript
-  var JaySchema = new IASchema({
+  var JaySchema = new jay-schema({
     name: {
       required: true,
     },
@@ -67,11 +67,11 @@ Mongo DB Operations Framework to be used with ia-schema
     }
   }, schemaOptions);
   ```
-  ### Register the model to IAMongo
+  ### Register the model to Jay-Mongo
 
   Basic registration
   ```javascript
-  IAMongo.register('Jay', JaySchema);
+  Jay-Mongo.register('Jay', JaySchema);
   ```
 
   You can register custom methods to add extra operations, or operation wrappers to the models
@@ -91,10 +91,10 @@ Mongo DB Operations Framework to be used with ia-schema
       })
     }
   };
-  IAMongo.register('Jay', JaySchema,methods);
+  Jay-Mongo.register('Jay', JaySchema,methods);
   ```
   Methods parameter needs to be an object.
-  Methods properties names need to different form IAMONGO reserved operation names:
+  Methods properties names need to different form Jay-MONGO reserved operation names:
     pMakeStruct
     pFindAndModify
     pUpdate
@@ -108,32 +108,32 @@ Mongo DB Operations Framework to be used with ia-schema
   You can use loadModels method to require the files of a folder where your models are, that way you can make sure when you call a model it has already been registered
 
   ```javascript
-  IAMongo.loadModels(__dirname + '/models/');
+  Jay-Mongo.loadModels(__dirname + '/models/');
   ```
 
   ###Express app.js example
   ```javascript
-  IAMongo.pConnect(config.db)
+  Jay-Mongo.pConnect(config.db)
     .then(function() {
-      IAMongo.loadModels(__dirname + '/_app/models/');
+      Jay-Mongo.loadModels(__dirname + '/_app/models/');
       var app = express();
       //EXPRESS CONFIGURATION WOULD BE HERE
       module.exports = app;
     }, function(err) {
-      console.error('IAMONGO CONNECTION ERROR:', err);
+      console.error('Jay-MONGO CONNECTION ERROR:', err);
     });
   ```
 
   ### Get the registered Model
   ```javascript
-  var Jay = IAMongo.model('Jay');
+  var Jay = Jay-Mongo.model('Jay');
   ```
   ### Create an Struct Manually
   ```javascript
   Jay.pMakeStruct({
       name: 'Jose',
       lastname: 'Rodriguez',
-      email: 'j@interaction.cr'
+      email: 'j@gmail.com'
     }).then(function(result) {
         console.log('struct', result);
       });
@@ -144,7 +144,7 @@ Mongo DB Operations Framework to be used with ia-schema
   Jay.pCreate({
       name: 'Jose',
       lastname: 'Rodriguez',
-      email: 'j@interaction.cr'
+      email: 'j@gmail.com'
     })
     .then(function(result) {
         console.log('new Jay', result[0]);
@@ -152,7 +152,7 @@ Mongo DB Operations Framework to be used with ia-schema
   ```
   ### Use a custom operation
   ```javascript
-  Jay.pFindByEmail('j@interaction.cr').then(function(result) {
+  Jay.pFindByEmail('j@gmail.com').then(function(result) {
     console.log('Found Jay', result);
   });
   ```
@@ -161,7 +161,7 @@ Mongo DB Operations Framework to be used with ia-schema
 
   ### All operations will return a promise
 
-  ### Check <a href='https://github.com/interactioncr/iaschema'>IA-Schema</a> documentation for Schema Details
+  ### Check <a href='https://github.com/zombitos/jay-schema'>jay-Schema</a> documentation for Schema Details
   ```javascript
   Jay.pMakeStruct(data,options,extention)
   ```
@@ -201,9 +201,9 @@ Mongo DB Operations Framework to be used with ia-schema
   }
   ```
 
-  pFindAndModify will run ia-schema pMakeStruct operation with option 
+  pFindAndModify will run jay-schema pMakeStruct operation with option 
   omitUndefined set to true to validate the data parameter.
-  Check <a href='https://github.com/interactioncr/iaschema'>IA-Schema</a> documentation for Schema Details
+  Check <a href='https://github.com/zombitos/jay-schema'>jay-Schema</a> documentation for Schema Details
 
   ### Update
   ```javascript
@@ -235,14 +235,14 @@ Mongo DB Operations Framework to be used with ia-schema
 
   Options: Options available to mongodb for update, such as {upsert:true}. Search mongoDB documentation for available options
 
-  pUpdate will run ia-schema pMakeStruct operation with option 
+  pUpdate will run jay-schema pMakeStruct operation with option 
   omitUndefined set to true to validate the data parameter.
-  Check <a href='https://github.com/interactioncr/iaschema'>IA-Schema</a> documentation for Schema Details
+  Check <a href='https://github.com/zombitos/jay-schema'>jay-Schema</a> documentation for Schema Details
 
 
   ### Create
   ```javascript
-  Jay.pCreate(data, options)
+  Jay.pCreate(data, options, schemaOptions)
   ```
   Data parameter can be an object or an array of objects.
   Either way the result will be an array of objects with the new
@@ -250,8 +250,10 @@ Mongo DB Operations Framework to be used with ia-schema
 
   Options object, check mongodb documentation for inserting options.
 
-  pCreate will run ia-schema pMakeStruct operation to validate the data parameter.
-  Check <a href='https://github.com/interactioncr/iaschema'>IA-Schema</a> documentation for Schema Details
+  schemaOptions object, jay-schema option, omitUndefined : true is required for index in unique and sparse to work. 
+
+  pCreate will run jay-schema pMakeStruct operation to validate the data parameter.
+  Check <a href='https://github.com/zombitos/jay-schema'>jay-Schema</a> documentation for Schema Details
 
   ### Find One
   ```javascript
@@ -344,15 +346,4 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 
 ## Release History
 
-* 0.0.1 Initial release
-* 0.0.3 Updated ia-schema test version
-* 1.0.0 Integrated ia-schema operations to model
-* 2.0.0 Change Update Interfaces
-* 2.1.0 Added pDestroy function
-* 2.1.1 Fixed nested updates
-* 2.1.3 Strong validation form update operators
-* 2.1.4 Added features methods and loadModels
-* 2.1.5 Fixed Nested property update bug
-* 2.1.6 Node version fixed
-* 2.1.7 Format
-* 2.1.8 Added comparison operations to id parser
+* 1.0.0 Init fork

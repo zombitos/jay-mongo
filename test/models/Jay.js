@@ -1,4 +1,4 @@
-var JSchema = require('ia-schema');
+var JSchema = require('jay-schema');
 var IAMongo = require('../../index');
 
 var schemaOptions = {
@@ -37,6 +37,14 @@ var Jay = new JSchema({
         return false;
       }
       return val;
+    }
+  },
+  emptyUniqueIndex:{
+    type:String,
+    index:-1,
+    indexOptions: {
+      unique: true,
+      sparse: true
     }
   },
   otherInfo: {
